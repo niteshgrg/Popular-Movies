@@ -12,12 +12,14 @@
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:minHeight="200dp">
 
-            <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+            <ImageView
                 android:id="@+id/coverPoster_id"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="300dp"
                 android:scaleType="centerCrop" />
 
             <TextView
@@ -25,8 +27,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:textSize="32sp"
-                android:padding="16dp"
+                android:textSize="24sp"
+                android:padding="8dp"
                 android:background="#bdbdbd"
                 android:layout_alignBottom="@id/coverPoster_id"
                 android:textColor="#ffffff"/>
@@ -50,11 +52,20 @@
                 android:id="@+id/release_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_gravity="end|right"
+                android:textAlignment="viewEnd"
                 android:padding="2dp"
                 android:paddingLeft="10dp"
                 android:textSize="24sp" />
+
         </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/favourites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/starStyle"
+            />
 
         <TextView
             android:id="@+id/overview"
@@ -62,5 +73,6 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:textSize="20sp" />
+
     </LinearLayout>
 </ScrollView>

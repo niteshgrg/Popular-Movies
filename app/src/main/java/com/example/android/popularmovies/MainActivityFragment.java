@@ -1,5 +1,6 @@
 package com.example.android.popularmovies;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -35,13 +36,13 @@ public class MainActivityFragment extends Fragment {
 
     private String sortBy;
     ImageAdapter adapter;
-    ArrayList<Results> movies_info;
+    public ArrayList<Results> movies_info;
 
     public MainActivityFragment() {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -66,6 +67,18 @@ public class MainActivityFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
+
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                Bundle extras = new Bundle();
+                extras.putString("id", movies_info.get(i).getId().toString());
+                extras.putString("backdrop_path", movies_info.get(i).getBackdrop_path());
+                extras.putString("title", movies_info.get(i).getTitle());
+                extras.putString("ratings", movies_info.get(i).getVote_average().toString());
+                extras.putString("release_date", movies_info.get(i).getRelease_date());
+                extras.putString("overview", movies_info.get(i).getOverview());
+                intent.putExtras(extras);
+
+                startActivity(intent);
 
 
             }
