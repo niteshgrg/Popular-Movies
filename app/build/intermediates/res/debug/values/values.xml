@@ -33,10 +33,12 @@
     <string-array name="sort_by_entities">
         <item>@string/sort_by_default</item>
         <item>Ratings</item>
+        <item>Favorites</item>
     </string-array>
     <string-array name="sort_values">
         <item>popularity.desc</item>
         <item>vote_average.desc</item>
+        <item>favorites</item>
     </string-array>
     <!-- From: file:/home/nitesh/AndroidStudioProjects/PopularMovies/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/res/values/values.xml -->
     <eat-comment/>

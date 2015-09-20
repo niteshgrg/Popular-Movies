@@ -2,9 +2,11 @@ package com.example.android.popularmovies.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 /**
@@ -18,7 +20,7 @@ public class MoviesProvider extends ContentProvider{
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
     private MoviesDbHelper mMoviesHelper;
-
+    private Bitmap bitmap;
 
 
     static UriMatcher buildUriMatcher()
@@ -113,6 +115,7 @@ public class MoviesProvider extends ContentProvider{
             case MOVIES:
             {
                 long _id = db.insert(MoviesContract.TABLE_NAME, null, values);
+
                 if(_id > 0)
                 {
                     retUri = MoviesContract.buildMoviesUri(_id);
@@ -220,5 +223,15 @@ public class MoviesProvider extends ContentProvider{
             }
         }
 
+    }
+
+    public void callSaveImage(Context context, String id, Bitmap picture, String coloumn, String path)
+    {
+        mMoviesHelper.saveImage(context, id, picture, coloumn, path);
+    }
+
+    public Bitmap callGetImage(String id, String coloumn)
+    {
+        return mMoviesHelper.getImage(id, coloumn);
     }
 }

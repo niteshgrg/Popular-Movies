@@ -2,6 +2,8 @@ package com.example.android.popularmovies;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,8 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.example.android.popularmovies.API.MoviesInterface;
+import com.example.android.popularmovies.data.MoviesContract;
+import com.example.android.popularmovies.data.MoviesProvider;
 import com.example.android.popularmovies.model.MoviePOJO;
 import com.example.android.popularmovies.model.Results;
 import com.example.android.popularmovies.model.addMovieList;
@@ -36,7 +40,10 @@ public class MainActivityFragment extends Fragment {
 
     private String sortBy;
     ImageAdapter adapter;
+    GridViewAdapter localAdapter;
     public ArrayList<Results> movies_info;
+    SharedPreferences shared;
+    ArrayList<Bitmap> posterImagesBitmap;
 
     public MainActivityFragment() {
     }
@@ -46,9 +53,9 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        movies_info = new ArrayList<Results>();
 
-        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        shared = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         sortBy = shared.getString(getString(R.string.pref_key),
                 getString(R.string.sort_by_default_value));
@@ -56,12 +63,23 @@ public class MainActivityFragment extends Fragment {
 
         GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
 
-        adapter = new ImageAdapter(getActivity(), movies_info);
+        if(!(sortBy.equals("favorites"))) {
 
-        gridview.setAdapter(adapter);
+            Log.e(LOG_TAG, " on create view not favorites");
+            movies_info = new ArrayList<Results>();
 
-        getMovies();
+            adapter = new ImageAdapter(getActivity(), movies_info);
 
+            gridview.setAdapter(adapter);
+        }
+        else
+        {
+            posterImagesBitmap = new ArrayList<Bitmap> ();
+
+            localAdapter = new GridViewAdapter(getActivity(), posterImagesBitmap);
+
+            gridview.setAdapter(localAdapter);
+        }
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -72,6 +90,7 @@ public class MainActivityFragment extends Fragment {
                 Bundle extras = new Bundle();
                 extras.putString("id", movies_info.get(i).getId().toString());
                 extras.putString("backdrop_path", movies_info.get(i).getBackdrop_path());
+                extras.putString("poster_path", movies_info.get(i).getPoster_path());
                 extras.putString("title", movies_info.get(i).getTitle());
                 extras.putString("ratings", movies_info.get(i).getVote_average().toString());
                 extras.putString("release_date", movies_info.get(i).getRelease_date());
@@ -83,35 +102,82 @@ public class MainActivityFragment extends Fragment {
 
             }
         });
+        Log.e(LOG_TAG, "on create View");
 
 
         return rootView;
     }
 
     public void getMovies() {
-        String ApiKey = "c8ea7e0252da1993f1dec16ac38c4157";
-        String API = "http://api.themoviedb.org";
 
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(API).build();
-        MoviesInterface moviesApi = restAdapter.create(MoviesInterface.class);
-        Log.d(LOG_TAG, "hello" + sortBy);
-        moviesApi.getMovies(sortBy, ApiKey, new Callback<MoviePOJO>() {
+        if(sortBy.equals("favorites"))
+        {
 
-            public void success(MoviePOJO moviePOJO, Response response) {
+            Log.e(LOG_TAG, "we are in favorites block");
+            Cursor movieCursor = getActivity().getContentResolver().query(
+                    MoviesContract.CONTENT_URI,
+                    new String[]{MoviesContract.KEY_ID, MoviesContract.COL_POSTER_PATH},
+                    null,
+                    null,
+                    null
+            );
 
-                addMovieList.get(getActivity()).setResultsArrayList(moviePOJO.getResults());
-                movies_info = addMovieList.get(getActivity()).getResultsArrayList();
-                adapter.updateContent(movies_info);
+            while (movieCursor.moveToNext())
+            {
+
+                int movieColumnIndex = movieCursor.getColumnIndex(MoviesContract.KEY_ID);
+                String coloumn_id = movieCursor.getString(movieColumnIndex);
+                MoviesProvider provider = new MoviesProvider();
+
+                posterImagesBitmap.add(provider.callGetImage(coloumn_id, MoviesContract.COL_POSTER_PATH));
+
 
             }
 
+            movieCursor.close();
 
-            public void failure(RetrofitError error) {
-                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
-            }
+            localAdapter.notifyDataSetChanged();
 
-        });
+        }
+        else {
+            String ApiKey = "c8ea7e0252da1993f1dec16ac38c4157";
+            String API = "http://api.themoviedb.org";
+
+            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(API).build();
+            MoviesInterface moviesApi = restAdapter.create(MoviesInterface.class);
+            Log.d(LOG_TAG, "Sort by: " + sortBy);
+
+            movies_info.clear();
+
+            moviesApi.getMovies(sortBy, ApiKey, new Callback<MoviePOJO>() {
+
+                public void success(MoviePOJO moviePOJO, Response response) {
+                    addMovieList.get(getActivity()).setResultsArrayList(moviePOJO.getResults());
+                    movies_info = addMovieList.get(getActivity()).getResultsArrayList();
+                    Log.e(LOG_TAG, "poster path: " + movies_info.get(1).getPoster_path());
+
+                    adapter.updateContent(movies_info);
+
+
+                }
+
+                public void failure(RetrofitError error) {
+                    Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                }
+
+            });
+
+        }
 
     }
 
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        Log.e(LOG_TAG, "We are in onResume");
+        sortBy = shared.getString(getString(R.string.pref_key),
+                getString(R.string.sort_by_default_value));
+        getMovies();
+    }
 }

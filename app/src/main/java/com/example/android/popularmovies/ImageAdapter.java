@@ -13,11 +13,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-
-
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private final LayoutInflater mInflater;
+    private LayoutInflater mInflater;
     String BASE_URL = "http://image.tmdb.org/t/p/w185/";
 
     private final String LOG_TAG = ImageAdapter.class.getSimpleName();
@@ -36,6 +34,7 @@ public class ImageAdapter extends BaseAdapter {
     {
         this.images.clear();
         this.images = temp;
+        Log.e(LOG_TAG, "update content :" +  temp.get(1).getPoster_path());
         this.notifyDataSetChanged();
     }
 
@@ -46,6 +45,8 @@ public class ImageAdapter extends BaseAdapter {
 
 
     public String getItem(int position) {
+
+        Log.e(LOG_TAG, "image adapter getitem");
 
         return images.get(position).getPoster_path();
     }
@@ -58,6 +59,7 @@ public class ImageAdapter extends BaseAdapter {
     public static class ViewHolder {
         public ImageView imageView;
     }
+
     // create a new ImageView for each item referenced by the Adapter
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

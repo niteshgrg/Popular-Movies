@@ -17,9 +17,10 @@ public class MoviesContract {
 
     public static final String TABLE_NAME = "favorites";
 
-    public static final String COL_BACKDROP_PATH = "backdrop_path";
+
     public static final String COL_MOVIE_ID = "id";
     public static final String COL_ORIGINAL_TITLE = "original_title";
+    public static final String COL_BACKDROP_PATH = "backdrop_path";
     public static final String COL_OVERVIEW = "overview";
     public static final String COL_POSTER_PATH = "poster_path";
     public static final String COL_RELEASE_DATE = "release_date";
