@@ -1,7 +1,6 @@
 package com.example.android.popularmovies;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,19 +33,15 @@ public class ImageAdapter extends BaseAdapter {
     {
         this.images.clear();
         this.images = temp;
-        Log.e(LOG_TAG, "update content :" +  temp.get(1).getPoster_path());
         this.notifyDataSetChanged();
     }
 
     public int getCount() {
         return images.size();
-
     }
 
 
     public String getItem(int position) {
-
-        Log.e(LOG_TAG, "image adapter getitem");
 
         return images.get(position).getPoster_path();
     }
@@ -78,7 +73,6 @@ public class ImageAdapter extends BaseAdapter {
         }
 
         String url = BASE_URL + getItem(position);
-        Log.d(LOG_TAG, url);
 
         Picasso.with(mContext).load(url).fit().into(holder.imageView);
         return vi;

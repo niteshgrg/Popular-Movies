@@ -2,17 +2,19 @@ package com.example.android.popularmovies.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 
 /**
  * Created by nitesh on 8/22/15.
  */
 public class MoviesProvider extends ContentProvider{
+
+    private final String LOG_TAG = MoviesProvider.class.getSimpleName();
 
     static final int MOVIES = 100;
     static final int MOVIES_WITH_ID = 101;
@@ -225,9 +227,11 @@ public class MoviesProvider extends ContentProvider{
 
     }
 
-    public void callSaveImage(Context context, String id, Bitmap picture, String coloumn, String path)
+    public void callSaveImage(String id, Bitmap picture, String coloumn, String path)
     {
-        mMoviesHelper.saveImage(context, id, picture, coloumn, path);
+
+        Log.e(LOG_TAG, "id = " + id + " picture = " + picture + " coloumn = " + coloumn + " path = " + path);
+        mMoviesHelper.saveImage(getContext(), id, picture, coloumn, path);
     }
 
     public Bitmap callGetImage(String id, String coloumn)

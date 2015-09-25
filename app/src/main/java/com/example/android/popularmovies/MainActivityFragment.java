@@ -64,8 +64,6 @@ public class MainActivityFragment extends Fragment {
         GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
 
         if(!(sortBy.equals("favorites"))) {
-
-            Log.e(LOG_TAG, " on create view not favorites");
             movies_info = new ArrayList<Results>();
 
             adapter = new ImageAdapter(getActivity(), movies_info);
@@ -102,7 +100,6 @@ public class MainActivityFragment extends Fragment {
 
             }
         });
-        Log.e(LOG_TAG, "on create View");
 
 
         return rootView;
@@ -130,8 +127,6 @@ public class MainActivityFragment extends Fragment {
                 MoviesProvider provider = new MoviesProvider();
 
                 posterImagesBitmap.add(provider.callGetImage(coloumn_id, MoviesContract.COL_POSTER_PATH));
-
-
             }
 
             movieCursor.close();
@@ -154,9 +149,7 @@ public class MainActivityFragment extends Fragment {
                 public void success(MoviePOJO moviePOJO, Response response) {
                     addMovieList.get(getActivity()).setResultsArrayList(moviePOJO.getResults());
                     movies_info = addMovieList.get(getActivity()).getResultsArrayList();
-                    Log.e(LOG_TAG, "poster path: " + movies_info.get(1).getPoster_path());
-
-                    adapter.updateContent(movies_info);
+                    adapter.updateContent(new ArrayList<Results>(movies_info));
 
 
                 }

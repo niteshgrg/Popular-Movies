@@ -73,9 +73,10 @@ public class DetailActivityFragment extends Fragment {
                     }
 
                     @Override
-                    public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                     /* Save the bitmap or do something with it here */
                         coverImage = bitmap;
+                        Log.e(LOG_TAG, " bitmap of image" + bitmap);
                         //Set it in the ImageView
                         mBackdrop.setImageBitmap(bitmap);
                     }
@@ -86,6 +87,9 @@ public class DetailActivityFragment extends Fragment {
                     }
                 });
 
+
+
+        Log.e(LOG_TAG, " bitmap of image" + coverImage);
 
         mTitle = (TextView) rootView.findViewById(R.id.title);
         mTitle.setText(title);
@@ -114,8 +118,15 @@ public class DetailActivityFragment extends Fragment {
 
                     MoviesProvider provider = new MoviesProvider();
 
-                    provider.callSaveImage(context, id, coverImage, MoviesContract.COL_BACKDROP_PATH, backdropPath);
+                    if(coverImage != null && id != null && backdropPath != null) {
+                        Log.e(LOG_TAG, "id =" + id + "backDropPath = " + backdropPath + "coverimage = " + coverImage);
+                        provider.callSaveImage(id, coverImage, MoviesContract.COL_BACKDROP_PATH, backdropPath);
 
+                    }
+                    else
+                    {
+                        Log.e(LOG_TAG, "coverImage empty");
+                    }
                     String url = BASE_URL + posterPath;
 
                     Picasso.with(getActivity())
@@ -129,7 +140,7 @@ public class DetailActivityFragment extends Fragment {
                                 @Override
                                 public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
                                     /* Save the bitmap or do something with it here */
-                                    posterImage = bitmap;
+                                    posterImage = bitmap.copy(bitmap.getConfig(), true);
 
                                 }
 
@@ -139,7 +150,7 @@ public class DetailActivityFragment extends Fragment {
                                 }
                             });
 
-                    provider.callSaveImage(context, id, posterImage, MoviesContract.COL_POSTER_PATH, posterPath);
+                    provider.callSaveImage(id, posterImage, MoviesContract.COL_POSTER_PATH, posterPath);
 
                     CharSequence text = "Adding to Favorites";
                     int duration = Toast.LENGTH_SHORT;
@@ -158,6 +169,8 @@ public class DetailActivityFragment extends Fragment {
                 }
             }
         });
+
+
 
 
 
