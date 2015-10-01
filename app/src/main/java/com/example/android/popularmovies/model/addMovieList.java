@@ -12,7 +12,6 @@ public class addMovieList {
     Context mContext;
 
     addMovieList(Context context) {
-
         mContext = context;
     }
 
@@ -24,7 +23,6 @@ public class addMovieList {
     }
 
     public ArrayList<com.example.android.popularmovies.model.Results> getResultsArrayList() {
-
         return mResultsArrayList;
     }
 
@@ -34,17 +32,14 @@ public class addMovieList {
     }
 
     public void setSingleResult(com.example.android.popularmovies.model.Results result) {
-
         mResultsArrayList.add(result);
     }
 
     public com.example.android.popularmovies.model.Results getSingleResultByPosition(int pos) {
-
         return mResultsArrayList.get(pos);
     }
 
     public void clearList() {
-
         mResultsArrayList.clear();
     }
 }

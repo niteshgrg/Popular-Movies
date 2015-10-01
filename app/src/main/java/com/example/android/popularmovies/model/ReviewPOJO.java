@@ -2,9 +2,6 @@ package com.example.android.popularmovies.model;
 
 import java.util.ArrayList;
 
-/**
- * Created by nitesh on 7/24/15.
- */
 public class ReviewPOJO {
 
     private String id;
@@ -28,6 +25,4 @@ public class ReviewPOJO {
     {
         this.id = id;
     }
-
-
 }

@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.example.android.popularmovies.API.MoviesInterface;
 import com.example.android.popularmovies.data.MoviesContract;
-import com.example.android.popularmovies.data.MoviesProvider;
+import com.example.android.popularmovies.data.MoviesDbHelper;
 import com.example.android.popularmovies.model.MoviePOJO;
 import com.example.android.popularmovies.model.Results;
 import com.example.android.popularmovies.model.addMovieList;
@@ -44,6 +44,10 @@ public class MainActivityFragment extends Fragment {
     public ArrayList<Results> movies_info;
     SharedPreferences shared;
     ArrayList<Bitmap> posterImagesBitmap;
+    private MoviesDbHelper mMoviesHelper;
+    GridView gridview;
+
+
 
     public MainActivityFragment() {
     }
@@ -55,29 +59,15 @@ public class MainActivityFragment extends Fragment {
 
 
 
+
+
         shared = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         sortBy = shared.getString(getString(R.string.pref_key),
                 getString(R.string.sort_by_default_value));
 
 
-        GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
-
-        if(!(sortBy.equals("favorites"))) {
-            movies_info = new ArrayList<Results>();
-
-            adapter = new ImageAdapter(getActivity(), movies_info);
-
-            gridview.setAdapter(adapter);
-        }
-        else
-        {
-            posterImagesBitmap = new ArrayList<Bitmap> ();
-
-            localAdapter = new GridViewAdapter(getActivity(), posterImagesBitmap);
-
-            gridview.setAdapter(localAdapter);
-        }
+        gridview = (GridView) rootView.findViewById(R.id.gridview);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -113,7 +103,7 @@ public class MainActivityFragment extends Fragment {
             Log.e(LOG_TAG, "we are in favorites block");
             Cursor movieCursor = getActivity().getContentResolver().query(
                     MoviesContract.CONTENT_URI,
-                    new String[]{MoviesContract.KEY_ID, MoviesContract.COL_POSTER_PATH},
+                    new String[]{MoviesContract.COL_MOVIE_ID, MoviesContract.COL_POSTER_PATH},
                     null,
                     null,
                     null
@@ -121,16 +111,12 @@ public class MainActivityFragment extends Fragment {
 
             while (movieCursor.moveToNext())
             {
-
-                int movieColumnIndex = movieCursor.getColumnIndex(MoviesContract.KEY_ID);
+                int movieColumnIndex = movieCursor.getColumnIndex(MoviesContract.COL_MOVIE_ID);
                 String coloumn_id = movieCursor.getString(movieColumnIndex);
-                MoviesProvider provider = new MoviesProvider();
-
-                posterImagesBitmap.add(provider.callGetImage(coloumn_id, MoviesContract.COL_POSTER_PATH));
+                posterImagesBitmap.add(mMoviesHelper.getImage(coloumn_id, MoviesContract.COL_POSTER_PATH));
             }
 
             movieCursor.close();
-
             localAdapter.notifyDataSetChanged();
 
         }
@@ -150,8 +136,6 @@ public class MainActivityFragment extends Fragment {
                     addMovieList.get(getActivity()).setResultsArrayList(moviePOJO.getResults());
                     movies_info = addMovieList.get(getActivity()).getResultsArrayList();
                     adapter.updateContent(new ArrayList<Results>(movies_info));
-
-
                 }
 
                 public void failure(RetrofitError error) {
@@ -171,6 +155,24 @@ public class MainActivityFragment extends Fragment {
         Log.e(LOG_TAG, "We are in onResume");
         sortBy = shared.getString(getString(R.string.pref_key),
                 getString(R.string.sort_by_default_value));
+
+        mMoviesHelper = new MoviesDbHelper(getActivity());
+
+        if(!(sortBy.equals("favorites"))) {
+            movies_info = new ArrayList<Results>();
+
+            adapter = new ImageAdapter(getActivity(), movies_info);
+
+            gridview.setAdapter(adapter);
+        }
+        else
+        {
+            posterImagesBitmap = new ArrayList<Bitmap> ();
+
+            localAdapter = new GridViewAdapter(getActivity(), posterImagesBitmap);
+
+            gridview.setAdapter(localAdapter);
+        }
         getMovies();
     }
 }

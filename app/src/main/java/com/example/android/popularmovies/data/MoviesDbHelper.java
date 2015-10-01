@@ -10,6 +10,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.example.android.popularmovies.DetailActivityFragment;
+
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -17,6 +19,7 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
 
 
     private static final int DATABASE_VERSION = 1;
+    private final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
 
     static final String DATABASE_NAME = "favorites.db";
 
@@ -62,15 +65,18 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
 
     public void saveImage(Context context, String id, Bitmap picture, String coloumn, String path)
     {
+        path = path.replace("/", "");
+        Log.d(LOG_TAG, path);
         String imagePath = "";
         File internalStorage = context.getDir("MovieImages", Context.MODE_PRIVATE);
         File imageFilePath = new File(internalStorage, path);
         imagePath = imageFilePath.toString();
+        Log.d(LOG_TAG, imagePath);
 
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(imageFilePath);
-            picture.compress(Bitmap.CompressFormat.JPEG, 100 , fos);
+            picture.compress(Bitmap.CompressFormat.JPEG, 85 , fos);
             fos.close();
         }
         catch (Exception ex) {
@@ -86,14 +92,19 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
 
         db.update(MoviesContract.TABLE_NAME,
                 newPictureValue,
-                MoviesContract.KEY_ID + "=?",
+                MoviesContract.COL_MOVIE_ID + "=?",
                 new String[]{String.valueOf(id)});
+
+        db.close();
     }
 
     public Bitmap getImage(String id, String coloumn) {
         String picturePath = getPicturePath(id, coloumn);
         if (picturePath == null || picturePath.length() == 0)
             return (null);
+
+        Log.d(LOG_TAG, picturePath);
+
 
         Bitmap picture = BitmapFactory.decodeFile(picturePath);
 
@@ -108,17 +119,20 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
         // returned by the request
         Cursor reportCursor = db.query(MoviesContract.TABLE_NAME,
                 new String[]{coloumn},
-                MoviesContract.KEY_ID + "=?",
+                MoviesContract.COL_MOVIE_ID + "=?",
                 new String[]{String.valueOf(id)},
                 null,
                 null,
                 null);
         reportCursor.moveToFirst();
 
+        db.close();
+
         // Get the path of the picture from the database row pointed by
         // the cursor using the getColumnIndex method of the cursor.
         String picturePath = reportCursor.getString(reportCursor.
                 getColumnIndex(coloumn));
+
 
         return (picturePath);
     }

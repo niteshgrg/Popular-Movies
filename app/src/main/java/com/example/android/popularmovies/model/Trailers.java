@@ -28,4 +28,8 @@ public class Trailers {
         this.key = key;
     }
 
+    public String getSite() { return site; }
+
+    public void setSite (String site) { this.site = site; }
+
 }

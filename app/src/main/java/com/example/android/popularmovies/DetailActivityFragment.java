@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.popularmovies.data.MoviesContract;
-import com.example.android.popularmovies.data.MoviesProvider;
+import com.example.android.popularmovies.data.MoviesDbHelper;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -30,6 +30,7 @@ public class DetailActivityFragment extends Fragment {
     private final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
 
     private String BASE_URL = "http://image.tmdb.org/t/p/w500/";
+    private MoviesDbHelper mMoviesHelper;
 
     private ImageView mBackdrop;
     private TextView mTitle;
@@ -57,6 +58,8 @@ public class DetailActivityFragment extends Fragment {
         final String rating = "Rating: " + extras.getString("ratings");
         final String releaseDate = "Release Date: " + extras.getString("release_date");
         final String overview = "Overview: " + extras.getString("overview");
+
+        mMoviesHelper = new MoviesDbHelper(getActivity());
 
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
@@ -114,22 +117,12 @@ public class DetailActivityFragment extends Fragment {
                 {
 
                     long movieId = interact.addMovie(id, title, posterPath, backdropPath, overview, releaseDate, rating);
-                    Context context = getActivity();
+                    final Context context = getActivity();
 
-                    MoviesProvider provider = new MoviesProvider();
 
-                    if(coverImage != null && id != null && backdropPath != null) {
-                        Log.e(LOG_TAG, "id =" + id + "backDropPath = " + backdropPath + "coverimage = " + coverImage);
-                        provider.callSaveImage(id, coverImage, MoviesContract.COL_BACKDROP_PATH, backdropPath);
-
-                    }
-                    else
-                    {
-                        Log.e(LOG_TAG, "coverImage empty");
-                    }
                     String url = BASE_URL + posterPath;
 
-                    Picasso.with(getActivity())
+                    Picasso.with(context)
                             .load(url)
                             .into(new Target() {
                                 @Override
@@ -140,7 +133,9 @@ public class DetailActivityFragment extends Fragment {
                                 @Override
                                 public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
                                     /* Save the bitmap or do something with it here */
-                                    posterImage = bitmap.copy(bitmap.getConfig(), true);
+                                    posterImage = bitmap;
+                                    mMoviesHelper.saveImage(context, id, posterImage, MoviesContract.COL_POSTER_PATH, posterPath);
+                                    mMoviesHelper.saveImage(context, id, coverImage, MoviesContract.COL_BACKDROP_PATH, backdropPath);
 
                                 }
 
@@ -150,7 +145,7 @@ public class DetailActivityFragment extends Fragment {
                                 }
                             });
 
-                    provider.callSaveImage(id, posterImage, MoviesContract.COL_POSTER_PATH, posterPath);
+
 
                     CharSequence text = "Adding to Favorites";
                     int duration = Toast.LENGTH_SHORT;
@@ -169,10 +164,6 @@ public class DetailActivityFragment extends Fragment {
                 }
             }
         });
-
-
-
-
 
         return rootView;
     }
