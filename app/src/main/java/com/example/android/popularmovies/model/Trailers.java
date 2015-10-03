@@ -2,11 +2,11 @@ package com.example.android.popularmovies.model;
 
 
 public class Trailers {
-    private String site;
+    public String site;
 
-    private String id;
+    public String id;
 
-    private String key;
+    public String key;
 
     public String getId ()
     {

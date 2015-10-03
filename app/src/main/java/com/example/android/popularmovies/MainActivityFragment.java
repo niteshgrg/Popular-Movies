@@ -141,7 +141,6 @@ public class MainActivityFragment extends Fragment {
                 public void failure(RetrofitError error) {
                     Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
                 }
-
             });
 
         }

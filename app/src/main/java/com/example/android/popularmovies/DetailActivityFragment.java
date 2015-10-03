@@ -10,16 +10,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.popularmovies.API.MoviesInterface;
 import com.example.android.popularmovies.data.MoviesContract;
 import com.example.android.popularmovies.data.MoviesDbHelper;
+import com.example.android.popularmovies.model.VideoPOJO;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 /**
@@ -40,6 +51,11 @@ public class DetailActivityFragment extends Fragment {
     private CheckBox mFavorite;
     private Bitmap coverImage;
     private Bitmap posterImage;
+    ArrayList<String> trailerList;
+    ArrayAdapter<String> adapter;
+
+    VideoPOJO mVideoPOJO;
+    private String id;
 
     public DetailActivityFragment() {
         setHasOptionsMenu(true);
@@ -51,7 +67,7 @@ public class DetailActivityFragment extends Fragment {
 
         Intent intent = getActivity().getIntent();
         Bundle extras = intent.getExtras();
-        final String id = extras.getString("id");
+        id = extras.getString("id");
         final String backdropPath = extras.getString("backdrop_path");
         final String posterPath =extras.getString("poster_path");
         final String title = extras.getString("title");
@@ -59,10 +75,19 @@ public class DetailActivityFragment extends Fragment {
         final String releaseDate = "Release Date: " + extras.getString("release_date");
         final String overview = "Overview: " + extras.getString("overview");
 
+        trailerList = new ArrayList<String>();
+
         mMoviesHelper = new MoviesDbHelper(getActivity());
+
+        adapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.list_item_trailers, R.id.trailer, trailerList);
 
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+        ListView listView = (ListView) rootView.findViewById(R.id.list_view_trailers);
+
+        listView.setAdapter(adapter);
+
         mBackdrop = (ImageView) rootView.findViewById(R.id.coverPoster_id);
         String url = BASE_URL + backdropPath;
         Log.e(LOG_TAG, "Detail poster url: " + url);
@@ -93,6 +118,8 @@ public class DetailActivityFragment extends Fragment {
 
 
         Log.e(LOG_TAG, " bitmap of image" + coverImage);
+
+        getTrailers();
 
         mTitle = (TextView) rootView.findViewById(R.id.title);
         mTitle.setText(title);
@@ -166,6 +193,34 @@ public class DetailActivityFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    public void getTrailers()
+    {
+        String ApiKey = "c8ea7e0252da1993f1dec16ac38c4157";
+        String API = "http://api.themoviedb.org";
+
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(API).setLogLevel(RestAdapter.LogLevel.FULL).build();
+        MoviesInterface moviesApi = restAdapter.create(MoviesInterface.class);
+
+        moviesApi.getVideos(id, ApiKey, new Callback<VideoPOJO>() {
+
+            public void success(VideoPOJO videoPOJO, Response response) {
+
+                mVideoPOJO = videoPOJO;
+                Log.e(LOG_TAG, "trailers get " + videoPOJO.getResults().size());
+                for(int i = 0; i < videoPOJO.getResults().size(); i++)
+                {
+                    trailerList.add("Trailer " + (i+1));
+                    Log.e(LOG_TAG, trailerList.get(i));
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            public void failure(RetrofitError error) {
+                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

@@ -17,13 +17,13 @@ public class VideoPOJO {
         this.id = id;
     }
 
-    private ArrayList<Trailers> trailer;
+    public ArrayList<com.example.android.popularmovies.model.Trailers> results;
 
-    public ArrayList<Trailers> getResults() {
-        return this.trailer;
+    public ArrayList<com.example.android.popularmovies.model.Trailers> getResults() {
+        return this.results;
     }
 
-    public void setResults(ArrayList<Trailers> trailer) {
-        this.trailer = trailer;
+    public void setResults(ArrayList<com.example.android.popularmovies.model.Trailers> results) {
+        this.results = results;
     }
 }
