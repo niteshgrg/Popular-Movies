@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -51,6 +53,7 @@ public class DetailActivityFragment extends Fragment {
     private CheckBox mFavorite;
     private Bitmap coverImage;
     private Bitmap posterImage;
+    ListView listView;
     ArrayList<String> trailerList;
     ArrayAdapter<String> adapter;
 
@@ -84,9 +87,6 @@ public class DetailActivityFragment extends Fragment {
 
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-        ListView listView = (ListView) rootView.findViewById(R.id.list_view_trailers);
-
-        listView.setAdapter(adapter);
 
         mBackdrop = (ImageView) rootView.findViewById(R.id.coverPoster_id);
         String url = BASE_URL + backdropPath;
@@ -97,7 +97,6 @@ public class DetailActivityFragment extends Fragment {
                 .into(new Target() {
                     @Override
                     public void onPrepareLoad(Drawable drawable) {
-
                     }
 
                     @Override
@@ -120,6 +119,9 @@ public class DetailActivityFragment extends Fragment {
         Log.e(LOG_TAG, " bitmap of image" + coverImage);
 
         getTrailers();
+        listView = (ListView) rootView.findViewById(R.id.list_view_trailers);
+
+        listView.setAdapter(adapter);
 
         mTitle = (TextView) rootView.findViewById(R.id.title);
         mTitle.setText(title);
@@ -140,8 +142,7 @@ public class DetailActivityFragment extends Fragment {
         mFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                {
+                if (isChecked) {
 
                     long movieId = interact.addMovie(id, title, posterPath, backdropPath, overview, releaseDate, rating);
                     final Context context = getActivity();
@@ -173,15 +174,12 @@ public class DetailActivityFragment extends Fragment {
                             });
 
 
-
                     CharSequence text = "Adding to Favorites";
                     int duration = Toast.LENGTH_SHORT;
 
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
-                }
-                else
-                {
+                } else {
                     Context context = getActivity();
                     CharSequence text = "Removing from Favorites";
                     int duration = Toast.LENGTH_SHORT;
@@ -189,6 +187,18 @@ public class DetailActivityFragment extends Fragment {
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                 }
+            }
+        });
+
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View v, int position, long id) {
+                // Do something in response to the click
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://www.youtube.com/watch?v=" + mVideoPOJO.getResults().get(position).getKey())));
             }
         });
 
@@ -209,11 +219,17 @@ public class DetailActivityFragment extends Fragment {
 
                 mVideoPOJO = videoPOJO;
                 Log.e(LOG_TAG, "trailers get " + videoPOJO.getResults().size());
-                for(int i = 0; i < videoPOJO.getResults().size(); i++)
+                int numTrailers = videoPOJO.getResults().size();
+                for(int i = 0; i < numTrailers; i++)
                 {
                     trailerList.add("Trailer " + (i+1));
                     Log.e(LOG_TAG, trailerList.get(i));
                 }
+                ViewGroup.LayoutParams params = listView.getLayoutParams();
+                View listItem = View.inflate(getActivity(), R.layout.list_item_trailers, null);
+                listItem.measure(0, 0);
+                params.height = (numTrailers * listItem.getMeasuredHeight()) + (listView.getDividerHeight() * numTrailers);
+                listView.setLayoutParams(params);
                 adapter.notifyDataSetChanged();
             }
 
@@ -222,5 +238,4 @@ public class DetailActivityFragment extends Fragment {
             }
         });
     }
-
 }
