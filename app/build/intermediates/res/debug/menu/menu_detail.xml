@@ -5,4 +5,4 @@
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>
-<!-- From: file:/home/nitesh/AndroidStudioProjects/PopularMovies/app/src/main/res/menu/menu_detail.xml -->
+<!-- From: file:/Users/niteshgarg/Android%20Nanodegree/Popular-Movies/app/src/main/res/menu/menu_detail.xml -->

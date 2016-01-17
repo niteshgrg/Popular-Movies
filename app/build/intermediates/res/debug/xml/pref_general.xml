@@ -10,4 +10,4 @@
         android:entries="@array/sort_by_entities"
         android:entryValues="@array/sort_values" />
 
-</PreferenceScreen><!-- From: file:/home/nitesh/AndroidStudioProjects/PopularMovies/app/src/main/res/xml/pref_general.xml -->
+</PreferenceScreen><!-- From: file:/Users/niteshgarg/Android%20Nanodegree/Popular-Movies/app/src/main/res/xml/pref_general.xml -->

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     
     <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_margin="10dp"
         android:src="@drawable/index"/>
 
@@ -16,4 +17,4 @@
         android:gravity="center_vertical"
         android:textSize="14sp" />
 
-</LinearLayout><!-- From: file:/home/nitesh/AndroidStudioProjects/PopularMovies/app/src/main/res/layout/list_item_trailers.xml -->
+</LinearLayout><!-- From: file:/Users/niteshgarg/Android%20Nanodegree/Popular-Movies/app/src/main/res/layout/list_item_trailers.xml -->

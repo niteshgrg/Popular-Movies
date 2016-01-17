@@ -4,49 +4,49 @@
     <item
         jar="/home/nitesh/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.5.2/7446d06ec8d4f7ffcc53f1da37c95f200dcb9387/picasso-2.5.2.jar"
         jumboMode="false"
-        revision="23.0.0 rc3"
+        revision="23.0.0"
         sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
         <dex dex="/home/nitesh/AndroidStudioProjects/PopularMovies/app/build/intermediates/pre-dexed/debug/picasso-2.5.2-807176d77b9df2623fecb8140c48e654d48037c9.jar" />
     </item>
     <item
         jar="/home/nitesh/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit/retrofit/1.9.0/a681c044244d9fc375198588297a39ba78028423/retrofit-1.9.0.jar"
         jumboMode="false"
-        revision="23.0.0 rc3"
+        revision="23.0.0"
         sha1="a681c044244d9fc375198588297a39ba78028423">
         <dex dex="/home/nitesh/AndroidStudioProjects/PopularMovies/app/build/intermediates/pre-dexed/debug/retrofit-1.9.0-28285e34b89e8366adca8978190f91ad8cdf9378.jar" />
     </item>
     <item
         jar="/home/nitesh/AndroidStudioProjects/PopularMovies/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/classes.jar"
         jumboMode="false"
-        revision="23.0.0 rc3"
+        revision="23.0.0"
         sha1="f8efd0096475e0daf054267b61544e10dc776503">
         <dex dex="/home/nitesh/AndroidStudioProjects/PopularMovies/app/build/intermediates/pre-dexed/debug/classes-33d5337d6208a1b6766d790ede4587396c6f07b4.jar" />
     </item>
     <item
         jar="/home/nitesh/AndroidStudioProjects/PopularMovies/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/libs/internal_impl-22.2.1.jar"
         jumboMode="false"
-        revision="23.0.0 rc3"
+        revision="23.0.0"
         sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
         <dex dex="/home/nitesh/AndroidStudioProjects/PopularMovies/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.1-98790b9a8f494f5e05f4e511ba3d43075abca829.jar" />
     </item>
     <item
         jar="/home/nitesh/AndroidStudioProjects/PopularMovies/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/jars/classes.jar"
         jumboMode="false"
-        revision="23.0.0 rc3"
+        revision="23.0.0"
         sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
         <dex dex="/home/nitesh/AndroidStudioProjects/PopularMovies/app/build/intermediates/pre-dexed/debug/classes-ddeccee6a1123a25c365428c1d213275c898211d.jar" />
     </item>
     <item
         jar="/opt/android-sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.1/support-annotations-22.2.1.jar"
         jumboMode="false"
-        revision="23.0.0 rc3"
+        revision="23.0.0"
         sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
         <dex dex="/home/nitesh/AndroidStudioProjects/PopularMovies/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.1-15ffb3ae85f3434f2eb371cfed5e4df15e215154.jar" />
     </item>
     <item
         jar="/home/nitesh/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3.1/ecb6e1f8e4b0e84c4b886c2f14a1500caf309757/gson-2.3.1.jar"
         jumboMode="false"
-        revision="23.0.0 rc3"
+        revision="23.0.0"
         sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
         <dex dex="/home/nitesh/AndroidStudioProjects/PopularMovies/app/build/intermediates/pre-dexed/debug/gson-2.3.1-7ed2fc9ffb10a89db3e904c9b2cc64b0ab413512.jar" />
     </item>

@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import com.example.android.popularmovies.API.MoviesInterface;
 import com.example.android.popularmovies.data.MoviesContract;
 import com.example.android.popularmovies.data.MoviesDbHelper;
+import com.example.android.popularmovies.model.ReviewPOJO;
 import com.example.android.popularmovies.model.VideoPOJO;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -42,6 +44,8 @@ public class DetailActivityFragment extends Fragment {
 
     private final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
 
+    static final String DETAIL_URI = "URI";
+
     private String BASE_URL = "http://image.tmdb.org/t/p/w500/";
     private MoviesDbHelper mMoviesHelper;
 
@@ -53,11 +57,15 @@ public class DetailActivityFragment extends Fragment {
     private CheckBox mFavorite;
     private Bitmap coverImage;
     private Bitmap posterImage;
-    ListView listView;
+    ListView listViewTrailers;
+    ListView listViewReviews;
     ArrayList<String> trailerList;
-    ArrayAdapter<String> adapter;
+    ArrayList<String> reviewList;
+    ArrayAdapter<String> adapterTrailers;
+    ArrayAdapter<String> adapterReviews;
 
     VideoPOJO mVideoPOJO;
+    ReviewPOJO mReviewPOJO;
     private String id;
 
     public DetailActivityFragment() {
@@ -74,16 +82,19 @@ public class DetailActivityFragment extends Fragment {
         final String backdropPath = extras.getString("backdrop_path");
         final String posterPath =extras.getString("poster_path");
         final String title = extras.getString("title");
-        final String rating = "Rating: " + extras.getString("ratings");
-        final String releaseDate = "Release Date: " + extras.getString("release_date");
-        final String overview = "Overview: " + extras.getString("overview");
+        final String rating = extras.getString("ratings") + "/10";
+        final String releaseDate = extras.getString("release_date");
+        final String overview = extras.getString("overview");
 
         trailerList = new ArrayList<String>();
+        reviewList = new ArrayList<String>();
 
         mMoviesHelper = new MoviesDbHelper(getActivity());
 
-        adapter = new ArrayAdapter<String>(getActivity(),
+        adapterTrailers = new ArrayAdapter<String>(getActivity(),
                 R.layout.list_item_trailers, R.id.trailer, trailerList);
+
+        adapterReviews = new ArrayAdapter<String>(getActivity(), R.layout.list_item_reviews, R.id.list_item_reviews, reviewList);
 
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
@@ -118,10 +129,21 @@ public class DetailActivityFragment extends Fragment {
 
         Log.e(LOG_TAG, " bitmap of image" + coverImage);
 
-        getTrailers();
-        listView = (ListView) rootView.findViewById(R.id.list_view_trailers);
+        listViewTrailers = (ListView) rootView.findViewById(R.id.list_view_trailers);
 
-        listView.setAdapter(adapter);
+        listViewTrailers.setAdapter(adapterTrailers);
+
+        getTrailers();
+
+
+        listViewReviews = (ListView) rootView.findViewById(R.id.list_view_reviews);
+
+        listViewReviews.setAdapter(adapterReviews);
+
+        getReviews();
+
+
+
 
         mTitle = (TextView) rootView.findViewById(R.id.title);
         mTitle.setText(title);
@@ -192,7 +214,7 @@ public class DetailActivityFragment extends Fragment {
 
 
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listViewTrailers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View v, int position, long id) {
@@ -218,19 +240,72 @@ public class DetailActivityFragment extends Fragment {
             public void success(VideoPOJO videoPOJO, Response response) {
 
                 mVideoPOJO = videoPOJO;
-                Log.e(LOG_TAG, "trailers get " + videoPOJO.getResults().size());
                 int numTrailers = videoPOJO.getResults().size();
-                for(int i = 0; i < numTrailers; i++)
-                {
-                    trailerList.add("Trailer " + (i+1));
-                    Log.e(LOG_TAG, trailerList.get(i));
+                for (int i = 0; i < numTrailers; i++) {
+                    trailerList.add("Trailer " + (i + 1));
                 }
-                ViewGroup.LayoutParams params = listView.getLayoutParams();
+                ViewGroup.LayoutParams params = listViewTrailers.getLayoutParams();
                 View listItem = View.inflate(getActivity(), R.layout.list_item_trailers, null);
                 listItem.measure(0, 0);
-                params.height = (numTrailers * listItem.getMeasuredHeight()) + (listView.getDividerHeight() * numTrailers);
-                listView.setLayoutParams(params);
-                adapter.notifyDataSetChanged();
+                params.height = (numTrailers * listItem.getMeasuredHeight()) + (listViewTrailers.getDividerHeight() * numTrailers);
+                listViewTrailers.setLayoutParams(params);
+                Log.e(LOG_TAG, "height of trailer listview " + params.height);
+                adapterTrailers.notifyDataSetChanged();
+            }
+
+            public void failure(RetrofitError error) {
+                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void getReviews()
+    {
+        String ApiKey = "c8ea7e0252da1993f1dec16ac38c4157";
+        String API = "http://api.themoviedb.org";
+
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(API).setLogLevel(RestAdapter.LogLevel.FULL).build();
+        MoviesInterface moviesApi = restAdapter.create(MoviesInterface.class);
+
+        moviesApi.getReviews(id, ApiKey, new Callback<ReviewPOJO>() {
+
+            public void success(ReviewPOJO reviewPOJO, Response response) {
+
+                mReviewPOJO = reviewPOJO;
+                Log.e(LOG_TAG, "Reviews get " + reviewPOJO.getResults().size());
+                int numReviews = reviewPOJO.getResults().size();
+                for (int i = 0; i < numReviews; i++) {
+                    reviewList.add(reviewPOJO.getResults().get(i).getContent());
+                }
+
+                adapterReviews.notifyDataSetChanged();
+
+
+                ListAdapter listAdapter = listViewReviews.getAdapter();
+
+                int numberOfItems = listAdapter.getCount();
+
+                // Get total height of all items.
+                int totalItemsHeight = 0;
+                for (int itemPos = 0; itemPos < numberOfItems; itemPos++) {
+                    View listItem = listAdapter.getView(itemPos, null, listViewReviews);
+                    listItem.measure(View.MeasureSpec.makeMeasureSpec(listViewReviews.getMeasuredWidth(), View.MeasureSpec.EXACTLY),
+                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+                    Log.e(LOG_TAG, "item height " + listItem.getMeasuredHeight());
+                    totalItemsHeight += listItem.getMeasuredHeight();
+                }
+
+                // Get total height of all item dividers.
+                int totalDividersHeight = listViewReviews.getDividerHeight() *
+                        (numberOfItems - 1);
+
+                // Set list height.
+                ViewGroup.LayoutParams params = listViewReviews.getLayoutParams();
+                params.height = totalItemsHeight + totalDividersHeight;
+                Log.e(LOG_TAG, "height of review listview " + params.height);
+                listViewReviews.setLayoutParams(params);
+                listViewReviews.requestLayout();
             }
 
             public void failure(RetrofitError error) {

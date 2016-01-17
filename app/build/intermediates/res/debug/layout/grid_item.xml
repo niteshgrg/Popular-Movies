@@ -7,4 +7,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minHeight="300dp"
-    android:scaleType="centerCrop" /><!-- From: file:/home/nitesh/AndroidStudioProjects/PopularMovies/app/src/main/res/layout/grid_item.xml -->
+    android:scaleType="centerCrop" /><!-- From: file:/Users/niteshgarg/Android%20Nanodegree/Popular-Movies/app/src/main/res/layout/grid_item.xml -->

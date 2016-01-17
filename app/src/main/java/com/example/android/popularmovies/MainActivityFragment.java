@@ -47,8 +47,6 @@ public class MainActivityFragment extends Fragment {
     private MoviesDbHelper mMoviesHelper;
     GridView gridview;
 
-
-
     public MainActivityFragment() {
     }
 
@@ -86,7 +84,6 @@ public class MainActivityFragment extends Fragment {
                 intent.putExtras(extras);
 
                 startActivity(intent);
-
 
             }
         });
