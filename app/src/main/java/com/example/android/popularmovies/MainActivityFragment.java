@@ -55,10 +55,6 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-
-
-
-
         shared = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         sortBy = shared.getString(getString(R.string.pref_key),
