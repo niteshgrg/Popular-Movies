@@ -1,6 +1,5 @@
 package com.example.android.popularmovies;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -30,6 +29,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -50,6 +50,12 @@ public class MainActivityFragment extends Fragment {
     public MainActivityFragment() {
     }
 
+    public interface Callback_activity {
+
+        public void onItemSelected(Bundle passing);
+    }
+
+
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,7 +74,7 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
 
-                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                //Intent intent = new Intent(getActivity(), DetailActivity.class);
                 Bundle extras = new Bundle();
                 extras.putString("id", movies_info.get(i).getId().toString());
                 extras.putString("backdrop_path", movies_info.get(i).getBackdrop_path());
@@ -77,9 +83,11 @@ public class MainActivityFragment extends Fragment {
                 extras.putString("ratings", movies_info.get(i).getVote_average().toString());
                 extras.putString("release_date", movies_info.get(i).getRelease_date());
                 extras.putString("overview", movies_info.get(i).getOverview());
-                intent.putExtras(extras);
 
-                startActivity(intent);
+                ((Callback_activity) getActivity()).onItemSelected(extras);
+                //intent.putExtras(extras);
+
+                //startActivity(intent);
 
             }
         });

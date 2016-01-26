@@ -76,8 +76,15 @@ public class DetailActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Intent intent = getActivity().getIntent();
-        Bundle extras = intent.getExtras();
+        Bundle extras;
+        if(getActivity().getIntent() != null) {
+            Intent intent = getActivity().getIntent();
+            extras = intent.getExtras();
+        }
+        else
+        {
+            extras = getArguments();
+        }
         id = extras.getString("id");
         final String backdropPath = extras.getString("backdrop_path");
         final String posterPath =extras.getString("poster_path");

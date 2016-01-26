@@ -9,20 +9,6 @@
         <dex dex="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/pre-dexed/debug/retrofit-1.9.0-0c91a3088be9929faa9a25564d221e63c7e3b11f.jar" />
     </item>
     <item
-        jar="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="f8efd0096475e0daf054267b61544e10dc776503">
-        <dex dex="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/pre-dexed/debug/classes-253fe6ff23b00461eb49d5ee041e3eda7752260e.jar" />
-    </item>
-    <item
-        jar="/Users/niteshgarg/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3.1/ecb6e1f8e4b0e84c4b886c2f14a1500caf309757/gson-2.3.1.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
-        <dex dex="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/pre-dexed/debug/gson-2.3.1-3ff402026d8de6bbaf5cec434b5d03c9e33ccf4f.jar" />
-    </item>
-    <item
         jar="/Users/niteshgarg/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.1/support-annotations-22.2.1.jar"
         jumboMode="false"
         revision="23.0.0"
@@ -35,6 +21,20 @@
         revision="23.0.0"
         sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
         <dex dex="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.1-f217d9913405f2089728d9e0240efd9c27acbb81.jar" />
+    </item>
+    <item
+        jar="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="f8efd0096475e0daf054267b61544e10dc776503">
+        <dex dex="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/pre-dexed/debug/classes-253fe6ff23b00461eb49d5ee041e3eda7752260e.jar" />
+    </item>
+    <item
+        jar="/Users/niteshgarg/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3.1/ecb6e1f8e4b0e84c4b886c2f14a1500caf309757/gson-2.3.1.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/pre-dexed/debug/gson-2.3.1-3ff402026d8de6bbaf5cec434b5d03c9e33ccf4f.jar" />
     </item>
     <item
         jar="/Users/niteshgarg/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.5.2/7446d06ec8d4f7ffcc53f1da37c95f200dcb9387/picasso-2.5.2.jar"
