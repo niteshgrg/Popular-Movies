@@ -36,7 +36,6 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -76,166 +75,163 @@ public class DetailActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
+        View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         Bundle extras;
-        if(getActivity().getIntent() != null) {
+        if (getActivity().getIntent() != null) {
             Intent intent = getActivity().getIntent();
             extras = intent.getExtras();
-        }
-        else
-        {
+        } else {
             extras = getArguments();
         }
-        id = extras.getString("id");
-        final String backdropPath = extras.getString("backdrop_path");
-        final String posterPath =extras.getString("poster_path");
-        final String title = extras.getString("title");
-        final String rating = extras.getString("ratings") + "/10";
-        final String releaseDate = extras.getString("release_date");
-        final String overview = extras.getString("overview");
+        final String backdropPath, posterPath, title, rating, releaseDate, overview;
 
-        trailerList = new ArrayList<String>();
-        reviewList = new ArrayList<String>();
+        if (extras != null) {
 
-        mMoviesHelper = new MoviesDbHelper(getActivity());
-
-        adapterTrailers = new ArrayAdapter<String>(getActivity(),
-                R.layout.list_item_trailers, R.id.trailer, trailerList);
-
-        adapterReviews = new ArrayAdapter<String>(getActivity(), R.layout.list_item_reviews, R.id.list_item_reviews, reviewList);
+            id = extras.getString("id");
+            backdropPath = extras.getString("backdrop_path");
+            posterPath = extras.getString("poster_path");
+            title = extras.getString("title");
+            rating = extras.getString("ratings") + "/10";
+            releaseDate = extras.getString("release_date");
+            overview = extras.getString("overview");
 
 
-        View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+            trailerList = new ArrayList<String>();
+            reviewList = new ArrayList<String>();
 
-        mBackdrop = (ImageView) rootView.findViewById(R.id.coverPoster_id);
-        String url = BASE_URL + backdropPath;
-        Log.e(LOG_TAG, "Detail poster url: " + url);
+            mMoviesHelper = new MoviesDbHelper(getActivity());
 
-        Picasso.with(getActivity())
-                .load(url)
-                .into(new Target() {
-                    @Override
-                    public void onPrepareLoad(Drawable drawable) {
-                    }
+            adapterTrailers = new ArrayAdapter<String>(getActivity(),
+                    R.layout.list_item_trailers, R.id.trailer, trailerList);
 
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            adapterReviews = new ArrayAdapter<String>(getActivity(), R.layout.list_item_reviews, R.id.list_item_reviews, reviewList);
+
+            mBackdrop = (ImageView) rootView.findViewById(R.id.coverPoster_id);
+            String url = BASE_URL + backdropPath;
+            Log.e(LOG_TAG, "Detail poster url: " + url);
+
+            Picasso.with(getActivity())
+                    .load(url)
+                    .into(new Target() {
+                        @Override
+                        public void onPrepareLoad(Drawable drawable) {
+                        }
+
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                     /* Save the bitmap or do something with it here */
-                        coverImage = bitmap;
-                        Log.e(LOG_TAG, " bitmap of image" + bitmap);
-                        //Set it in the ImageView
-                        mBackdrop.setImageBitmap(bitmap);
-                    }
+                            coverImage = bitmap;
+                            Log.e(LOG_TAG, " bitmap of image" + bitmap);
+                            //Set it in the ImageView
+                            mBackdrop.setImageBitmap(bitmap);
+                        }
 
-                    @Override
-                    public void onBitmapFailed(Drawable args0) {
+                        @Override
+                        public void onBitmapFailed(Drawable args0) {
 
-                    }
-                });
+                        }
+                    });
 
+            Log.e(LOG_TAG, " bitmap of image" + coverImage);
 
+            listViewTrailers = (ListView) rootView.findViewById(R.id.list_view_trailers);
 
-        Log.e(LOG_TAG, " bitmap of image" + coverImage);
+            listViewTrailers.setAdapter(adapterTrailers);
 
-        listViewTrailers = (ListView) rootView.findViewById(R.id.list_view_trailers);
-
-        listViewTrailers.setAdapter(adapterTrailers);
-
-        getTrailers();
+            getTrailers();
 
 
-        listViewReviews = (ListView) rootView.findViewById(R.id.list_view_reviews);
+            listViewReviews = (ListView) rootView.findViewById(R.id.list_view_reviews);
 
-        listViewReviews.setAdapter(adapterReviews);
+            listViewReviews.setAdapter(adapterReviews);
 
-        getReviews();
-
-
+            getReviews();
 
 
-        mTitle = (TextView) rootView.findViewById(R.id.title);
-        mTitle.setText(title);
+            mTitle = (TextView) rootView.findViewById(R.id.title);
+            mTitle.setText(title);
 
-        mRatings = (TextView) rootView.findViewById(R.id.ratings);
-        mRatings.setText(rating);
+            mRatings = (TextView) rootView.findViewById(R.id.ratings);
+            mRatings.setText(rating);
 
-        mReleaseDate = (TextView) rootView.findViewById(R.id.release_date);
-        mReleaseDate.setText(releaseDate);
+            mReleaseDate = (TextView) rootView.findViewById(R.id.release_date);
+            mReleaseDate.setText(releaseDate);
 
-        mOverview = (TextView) rootView.findViewById(R.id.overview);
-        mOverview.setText(overview);
+            mOverview = (TextView) rootView.findViewById(R.id.overview);
+            mOverview.setText(overview);
 
-        mFavorite = (CheckBox) rootView.findViewById(R.id.favourites);
+            mFavorite = (CheckBox) rootView.findViewById(R.id.favourites);
 
-        final InteractingDatabase interact = new InteractingDatabase(getActivity());
+            final InteractingDatabase interact = new InteractingDatabase(getActivity());
 
-        mFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
+            mFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
 
-                    long movieId = interact.addMovie(id, title, posterPath, backdropPath, overview, releaseDate, rating);
-                    final Context context = getActivity();
+                        long movieId = interact.addMovie(id, title, posterPath, backdropPath, overview, releaseDate, rating);
+                        final Context context = getActivity();
 
 
-                    String url = BASE_URL + posterPath;
+                        String url = BASE_URL + posterPath;
 
-                    Picasso.with(context)
-                            .load(url)
-                            .into(new Target() {
-                                @Override
-                                public void onPrepareLoad(Drawable drawable) {
+                        Picasso.with(context)
+                                .load(url)
+                                .into(new Target() {
+                                    @Override
+                                    public void onPrepareLoad(Drawable drawable) {
 
-                                }
+                                    }
 
-                                @Override
-                                public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                                    @Override
+                                    public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
                                     /* Save the bitmap or do something with it here */
-                                    posterImage = bitmap;
-                                    mMoviesHelper.saveImage(context, id, posterImage, MoviesContract.COL_POSTER_PATH, posterPath);
-                                    mMoviesHelper.saveImage(context, id, coverImage, MoviesContract.COL_BACKDROP_PATH, backdropPath);
+                                        posterImage = bitmap;
+                                        mMoviesHelper.saveImage(context, id, posterImage, MoviesContract.COL_POSTER_PATH, posterPath);
+                                        mMoviesHelper.saveImage(context, id, coverImage, MoviesContract.COL_BACKDROP_PATH, backdropPath);
 
-                                }
+                                    }
 
-                                @Override
-                                public void onBitmapFailed(Drawable args0) {
+                                    @Override
+                                    public void onBitmapFailed(Drawable args0) {
 
-                                }
-                            });
+                                    }
+                                });
 
 
-                    CharSequence text = "Adding to Favorites";
-                    int duration = Toast.LENGTH_SHORT;
+                        CharSequence text = "Adding to Favorites";
+                        int duration = Toast.LENGTH_SHORT;
 
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                } else {
-                    Context context = getActivity();
-                    CharSequence text = "Removing from Favorites";
-                    int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    } else {
+                        Context context = getActivity();
+                        CharSequence text = "Removing from Favorites";
+                        int duration = Toast.LENGTH_SHORT;
 
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
                 }
-            }
-        });
+            });
 
 
+            listViewTrailers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-        listViewTrailers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View v, int position, long id) {
+                    // Do something in response to the click
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("http://www.youtube.com/watch?v=" + mVideoPOJO.getResults().get(position).getKey())));
+                }
+            });
+        }
 
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View v, int position, long id) {
-                // Do something in response to the click
-                startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://www.youtube.com/watch?v=" + mVideoPOJO.getResults().get(position).getKey())));
-            }
-        });
+            return rootView;
 
-        return rootView;
     }
 
-    public void getTrailers()
-    {
+    public void getTrailers() {
         String ApiKey = "c8ea7e0252da1993f1dec16ac38c4157";
         String API = "http://api.themoviedb.org";
 
@@ -266,8 +262,7 @@ public class DetailActivityFragment extends Fragment {
         });
     }
 
-    public void getReviews()
-    {
+    public void getReviews() {
         String ApiKey = "c8ea7e0252da1993f1dec16ac38c4157";
         String API = "http://api.themoviedb.org";
 

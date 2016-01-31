@@ -9,20 +9,6 @@
         <dex dex="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/pre-dexed/debug/retrofit-1.9.0-0c91a3088be9929faa9a25564d221e63c7e3b11f.jar" />
     </item>
     <item
-        jar="/Users/niteshgarg/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.1/support-annotations-22.2.1.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
-        <dex dex="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.1-cd455157fb320e27f261aea8baf4f3a122a0f0cc.jar" />
-    </item>
-    <item
-        jar="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/libs/internal_impl-22.2.1.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
-        <dex dex="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.1-f217d9913405f2089728d9e0240efd9c27acbb81.jar" />
-    </item>
-    <item
         jar="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/classes.jar"
         jumboMode="false"
         revision="23.0.0"
@@ -44,11 +30,25 @@
         <dex dex="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/pre-dexed/debug/picasso-2.5.2-b2f2b963a9542896d8dcb72b14c5b02d39a53bb9.jar" />
     </item>
     <item
+        jar="/Users/niteshgarg/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.1/support-annotations-22.2.1.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
+        <dex dex="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.1-cd455157fb320e27f261aea8baf4f3a122a0f0cc.jar" />
+    </item>
+    <item
         jar="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/jars/classes.jar"
         jumboMode="false"
         revision="23.0.0"
         sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
         <dex dex="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/pre-dexed/debug/classes-27ecab135bee6ad3fbf4d4d679d6c61a0baa0c1a.jar" />
+    </item>
+    <item
+        jar="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/libs/internal_impl-22.2.1.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
+        <dex dex="/Users/niteshgarg/Android Nanodegree/Popular-Movies/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.1-f217d9913405f2089728d9e0240efd9c27acbb81.jar" />
     </item>
 
 </items>

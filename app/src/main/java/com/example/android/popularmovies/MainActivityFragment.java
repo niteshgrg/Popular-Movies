@@ -46,6 +46,7 @@ public class MainActivityFragment extends Fragment {
     ArrayList<Bitmap> posterImagesBitmap;
     private MoviesDbHelper mMoviesHelper;
     GridView gridview;
+    Bundle extras;
 
     public MainActivityFragment() {
     }
@@ -75,7 +76,7 @@ public class MainActivityFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
 
                 //Intent intent = new Intent(getActivity(), DetailActivity.class);
-                Bundle extras = new Bundle();
+                extras = new Bundle();
                 extras.putString("id", movies_info.get(i).getId().toString());
                 extras.putString("backdrop_path", movies_info.get(i).getBackdrop_path());
                 extras.putString("poster_path", movies_info.get(i).getPoster_path());
@@ -137,6 +138,20 @@ public class MainActivityFragment extends Fragment {
                     addMovieList.get(getActivity()).setResultsArrayList(moviePOJO.getResults());
                     movies_info = addMovieList.get(getActivity()).getResultsArrayList();
                     adapter.updateContent(new ArrayList<Results>(movies_info));
+
+                    if(extras == null)
+                    {
+                        extras = new Bundle();
+                        extras.putString("id", movies_info.get(0).getId().toString());
+                        extras.putString("backdrop_path", movies_info.get(0).getBackdrop_path());
+                        extras.putString("poster_path", movies_info.get(0).getPoster_path());
+                        extras.putString("title", movies_info.get(0).getTitle());
+                        extras.putString("ratings", movies_info.get(0).getVote_average().toString());
+                        extras.putString("release_date", movies_info.get(0).getRelease_date());
+                        extras.putString("overview", movies_info.get(0).getOverview());
+                        ((Callback_activity) getActivity()).onItemSelected(extras);
+                    }
+
                 }
 
                 public void failure(RetrofitError error) {

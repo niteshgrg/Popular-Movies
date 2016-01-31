@@ -3,6 +3,7 @@ package com.example.android.popularmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -11,6 +12,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
     private boolean mTwoPane;
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     @Override
     public void onItemSelected(Bundle passed) {
 
+        Log.e(LOG_TAG, "mtwo pane value: " + mTwoPane );
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
