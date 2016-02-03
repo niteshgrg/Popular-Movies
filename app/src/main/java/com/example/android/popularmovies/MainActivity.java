@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             // fragment transaction.
 
             DetailActivityFragment fragment = new DetailActivityFragment();
+            Log.e(LOG_TAG,"passed here:" + passed.getString("id"));
             fragment.setArguments(passed);
 
             getSupportFragmentManager().beginTransaction()

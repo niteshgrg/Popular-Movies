@@ -36,7 +36,7 @@ import retrofit.client.Response;
 public class MainActivityFragment extends Fragment {
 
 
-    private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
 
     private String sortBy;
     ImageAdapter adapter;
@@ -52,7 +52,6 @@ public class MainActivityFragment extends Fragment {
     }
 
     public interface Callback_activity {
-
         public void onItemSelected(Bundle passing);
     }
 
@@ -60,13 +59,13 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         shared = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         sortBy = shared.getString(getString(R.string.pref_key),
                 getString(R.string.sort_by_default_value));
-
 
         gridview = (GridView) rootView.findViewById(R.id.gridview);
 
@@ -111,8 +110,7 @@ public class MainActivityFragment extends Fragment {
                     null
             );
 
-            while (movieCursor.moveToNext())
-            {
+            while (movieCursor.moveToNext()) {
                 int movieColumnIndex = movieCursor.getColumnIndex(MoviesContract.COL_MOVIE_ID);
                 String coloumn_id = movieCursor.getString(movieColumnIndex);
                 posterImagesBitmap.add(mMoviesHelper.getImage(coloumn_id, MoviesContract.COL_POSTER_PATH));
@@ -135,12 +133,16 @@ public class MainActivityFragment extends Fragment {
             moviesApi.getMovies(sortBy, ApiKey, new Callback<MoviePOJO>() {
 
                 public void success(MoviePOJO moviePOJO, Response response) {
+
+                    addMovieList.get(getActivity()).clearList();
                     addMovieList.get(getActivity()).setResultsArrayList(moviePOJO.getResults());
                     movies_info = addMovieList.get(getActivity()).getResultsArrayList();
+
+                    Log.e(LOG_TAG, "Movies info list : " + movies_info.get(0).getTitle());
                     adapter.updateContent(new ArrayList<Results>(movies_info));
 
-                    if(extras == null)
-                    {
+                    int layoutId = getActivity().getResources().getIdentifier("movie_detail_container", "layout", getActivity().getPackageName());
+                    if (extras == null && layoutId != 0) {
                         extras = new Bundle();
                         extras.putString("id", movies_info.get(0).getId().toString());
                         extras.putString("backdrop_path", movies_info.get(0).getBackdrop_path());
@@ -149,6 +151,7 @@ public class MainActivityFragment extends Fragment {
                         extras.putString("ratings", movies_info.get(0).getVote_average().toString());
                         extras.putString("release_date", movies_info.get(0).getRelease_date());
                         extras.putString("overview", movies_info.get(0).getOverview());
+                        Log.e(LOG_TAG, "extras here:" + extras.getString("id"));
                         ((Callback_activity) getActivity()).onItemSelected(extras);
                     }
 
@@ -158,6 +161,8 @@ public class MainActivityFragment extends Fragment {
                     Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
                 }
             });
+
+
 
         }
 
@@ -179,15 +184,21 @@ public class MainActivityFragment extends Fragment {
             adapter = new ImageAdapter(getActivity(), movies_info);
 
             gridview.setAdapter(adapter);
+
+            getMovies();
+
+            adapter.notifyDataSetChanged();
         }
-        else
-        {
+        else {
             posterImagesBitmap = new ArrayList<Bitmap> ();
 
             localAdapter = new GridViewAdapter(getActivity(), posterImagesBitmap);
 
             gridview.setAdapter(localAdapter);
+
+            getMovies();
+
+            localAdapter.notifyDataSetChanged();
         }
-        getMovies();
     }
 }

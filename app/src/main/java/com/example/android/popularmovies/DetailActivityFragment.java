@@ -7,8 +7,13 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -47,6 +52,7 @@ public class DetailActivityFragment extends Fragment {
 
     private String BASE_URL = "http://image.tmdb.org/t/p/w500/";
     private MoviesDbHelper mMoviesHelper;
+    private ShareActionProvider mShareActionProvider;
 
     private ImageView mBackdrop;
     private TextView mTitle;
@@ -76,13 +82,18 @@ public class DetailActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
+
         Bundle extras;
-        if (getActivity().getIntent() != null) {
+        if (getActivity().getIntent().getExtras() != null) {
             Intent intent = getActivity().getIntent();
             extras = intent.getExtras();
+
         } else {
             extras = getArguments();
+            //Log.e(LOG_TAG, "extras detail: " + extras.getString("id"));
         }
+
         final String backdropPath, posterPath, title, rating, releaseDate, overview;
 
         if (extras != null) {
@@ -132,7 +143,7 @@ public class DetailActivityFragment extends Fragment {
                         }
                     });
 
-            Log.e(LOG_TAG, " bitmap of image" + coverImage);
+            //Log.e(LOG_TAG, " bitmap of image" + coverImage);
 
             listViewTrailers = (ListView) rootView.findViewById(R.id.list_view_trailers);
 
@@ -231,6 +242,28 @@ public class DetailActivityFragment extends Fragment {
 
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.detailfragment, menu);
+
+        // Retrieve the share menu item
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+
+        // Get the provider and hold onto it to set/change the share intent.
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+    }
+
+    private Intent createShareForecastIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "http://www.youtube.com/watch?v=" + mVideoPOJO.getResults().get(0).getKey());
+        return shareIntent;
+    }
+
+
     public void getTrailers() {
         String ApiKey = "c8ea7e0252da1993f1dec16ac38c4157";
         String API = "http://api.themoviedb.org";
@@ -252,8 +285,10 @@ public class DetailActivityFragment extends Fragment {
                 listItem.measure(0, 0);
                 params.height = (numTrailers * listItem.getMeasuredHeight()) + (listViewTrailers.getDividerHeight() * numTrailers);
                 listViewTrailers.setLayoutParams(params);
-                Log.e(LOG_TAG, "height of trailer listview " + params.height);
+                //Log.e(LOG_TAG, "height of trailer listview " + params.height);
                 adapterTrailers.notifyDataSetChanged();
+
+                mShareActionProvider.setShareIntent(createShareForecastIntent());
             }
 
             public void failure(RetrofitError error) {

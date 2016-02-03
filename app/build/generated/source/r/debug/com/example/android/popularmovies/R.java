@@ -1560,7 +1560,8 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f0e003d;
         public static final int action_mode_bar_stub=0x7f0e003c;
         public static final int action_mode_close_button=0x7f0e0025;
-        public static final int action_settings=0x7f0e006a;
+        public static final int action_settings=0x7f0e006b;
+        public static final int action_share=0x7f0e006a;
         public static final int activity_chooser_view_content=0x7f0e0026;
         public static final int alertTitle=0x7f0e0030;
         public static final int always=0x7f0e0016;
@@ -1707,8 +1708,9 @@ containing a value of this type.
         public static final int support_simple_spinner_dropdown_item=0x7f04002b;
     }
     public static final class menu {
-        public static final int menu_detail=0x7f0f0000;
-        public static final int menu_main=0x7f0f0001;
+        public static final int detailfragment=0x7f0f0000;
+        public static final int menu_detail=0x7f0f0001;
+        public static final int menu_main=0x7f0f0002;
     }
     public static final class mipmap {
         public static final int ic_launcher=0x7f030000;
